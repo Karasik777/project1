@@ -34,7 +34,7 @@ model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
 
 #Compilation
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-model.fit(x_train, y_train, epochs=2000)
+model.fit(x_train, y_train, epochs=10000)
 
 #Compares AI prediction and actual data (Or something)
 model.evaluate(x_test, y_test)
