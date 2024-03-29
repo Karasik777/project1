@@ -29,20 +29,29 @@ y = dataset["2"]
 
 
 #Split data into testing and training set
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
 
 
 #Build and train model 
 model = tf.keras.models.Sequential()
 
 #NOT WORKING CODE
-# model.add(tf.keras.layers.Dense(256, input_shape=x_train.shape, activation='sigmoid'))
+#model.add(tf.keras.layers.Dense(512, input_shape=x_train.shape, activation='sigmoid'))
 # model.add(tf.keras.layers.Dense(256, activation='sigmoid'))
 # model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
 
-model.add(tf.keras.Input(shape=(x_train.shape[1],))) 
-model.add(tf.keras.layers.Dense(128, activation='sigmoid'))
-model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
+model.add(tf.keras.Input(shape=(x_train.shape[1]))) 
+# model.add(tf.keras.Input(shape=(x_test.shape[1]))) 
+
+model.add(tf.keras.Input(shape=(y_train.shape))) 
+# model.add(tf.keras.Input(shape=(y_test.shape)))
+
+
+network_num = 12
+
+for i in range(0, network_num):
+    model.add(tf.keras.layers.Dense( 2 ** (network_num - i), activation='sigmoid'))
+
 
 #Compilation 
 #Model only for cancer
@@ -55,10 +64,11 @@ model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
 #need to set up machine learning for prediction instead of training
 model.compile(optimizer='adam', loss='mean_squared_error', metrics=['accuracy'])
 
-model.fit(x_train, y_train, epochs=100)
+model.fit(x_train, y_train, epochs=1000000)
 
 #Compares AI prediction and actual data (Or something)
 model.evaluate(x_test, y_test)
+
 
 
 
