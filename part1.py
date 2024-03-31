@@ -59,7 +59,10 @@ model.add(tf.keras.layers.Dense( 1, activation='sigmoid'))
 
 #Compile/Build model:
 # model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']) 
-model.compile(optimizer='Adam', loss='binary_crossentropy', metrics=['accuracy']) 
+# model.compile(optimizer='Adam', loss='binary_crossentropy', metrics=['accuracy']) 
+
+#Mean squared error 
+model.compile(optimizer='Adam', loss='mean_squared_error', metrics=['accuracy']) 
 
 #Printing function to parse into model
 class PrintSequenceCallback(keras.callbacks.Callback):
