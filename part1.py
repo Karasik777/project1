@@ -10,7 +10,7 @@ import tensorflow as tf
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-#Try testing the error of AI
+#Try testing the error of AI/Testing primes
 def is_prime(num):
     if num <=  1:
         return False
@@ -24,41 +24,44 @@ def is_prime(num):
             return False
     return True
 
-#for generated primes:
+##################################################################################################
+#Could make a csv where one side is numbers to 10 000 
+#While the other is 0 or 1 
+#This will allow binary crossentropy
+##################################################################################################
+
+#for Primes generated locally 
 # numbers = np.arange(1, 10001)
 # labels = np.array([1 if is_prime(num) else 0 for num in numbers])
 
 #for document reading 
 document = pd.read_csv('primenumbers.csv')
 numbers = document['Primes'].values
+numbers = numbers.reshape(-1, 1)
 labels = np.array([1 if is_prime(num) else 0 for num in numbers])
-
-#Need to filter data here like statistics
-#Primes is prediction 
-#Cancer is taking in values and spitting out 1 or 0 
 
 #Build and train model 
 model = tf.keras.models.Sequential()
 
 #data shape
-model.add(tf.keras.Input(shape=1)) 
+model.add(tf.keras.Input(shape=numbers.shape[1])) 
 
 #ReLu = Linear regression model 
-for i in range(0, 8):
+for i in range(0, 14):
     model.add(tf.keras.layers.Dense( 2 ** (i), activation='relu'))
 
 #Tanh - -1 to 1 
-for i in range(0,4):
+for i in range(0,7):
     model.add(tf.keras.layers.Dense( 2 ** (i), activation='tanh'))
 
 #Binary 0 and 1
 model.add(tf.keras.layers.Dense( 1, activation='sigmoid'))
 
-#Reasonable error due to wrong generation
-#need to set up machine learning for prediction instead of training
+#Compile/Build model:
 # model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']) 
 model.compile(optimizer='Adam', loss='binary_crossentropy', metrics=['accuracy']) 
 
+#Printing function to parse into model
 class PrintSequenceCallback(keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs=None):
         if epoch % 1 == 0:  # Adjust the frequency of printing as needed
