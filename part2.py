@@ -44,7 +44,7 @@ def run_model(numbers, labels):
                 print(f"labels: {labels}")
     #Train model
     # model.fit(numbers, labels, epochs=10, validation_split=0.2, callbacks=[PrintSequenceCallback()])            
-    model.fit(numbers, labels, epochs=10000, validation_split=0.2)
+    model.fit(numbers, labels, epochs=15, validation_split=0.2)
     test_loss, test_acc = model.evaluate(numbers, labels)
     return model
 
@@ -65,7 +65,8 @@ def main():
         prediction = [0 if num < 0.5 else 1 for num in prediction]
         #Evaluate accuracy of prediction
         accuracy_of_prediction = accuracy_score(labels, prediction)
-        if accuracy_of_prediction >= 0.95:
+        print(f"Prediction Accuracy: {accuracy_of_prediction}")
+        if accuracy_of_prediction >= 0.98:
             model.save(f"Good_model_{count + 1}")
             count = count + 1 
         elif count == 5:
