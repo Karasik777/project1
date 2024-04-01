@@ -77,7 +77,7 @@ class PrintSequenceCallback(keras.callbacks.Callback):
 #Train model
 #This will print the results as it trains
 # model.fit(numbers, labels, epochs=10, validation_split=0.2, callbacks=[PrintSequenceCallback()]) 
-model.fit(numbers, labels, epochs=10, validation_split=0.2)
+model.fit(numbers, labels, epochs=1000, validation_split=0.2)
 
 #Compares AI prediction and actual data (Or something)
 test_loss, test_acc = model.evaluate(numbers, labels)
@@ -108,3 +108,4 @@ print(f"Prediction Accuracy: {accuracy_of_prediction}")
 
 #Write a function to run the models inifnitely untill a good one is reached 
 #Like while 1 run if model accuracy above blah save it 
+
