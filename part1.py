@@ -47,22 +47,24 @@ model = tf.keras.models.Sequential()
 model.add(tf.keras.Input(shape=numbers.shape[1])) 
 
 #ReLu = Rectified Linear model
-for i in range(0, 7):
+for i in range(0, 6):
     model.add(tf.keras.layers.Dense( 2 ** (i), activation='relu'))
 
-model.add(tf.keras.layers.Dense( 2 ** (7), activation='tanh'))
+model.add(tf.keras.layers.Dense( 8, activation='tanh'))
 
 #Binary 0 and 1
-model.add(tf.keras.layers.Dense( 4, activation='sigmoid'))
-model.add(tf.keras.layers.Dense( 2, activation='sigmoid'))
+# model.add(tf.keras.layers.Dense( 2, activation='sigmoid'))
 model.add(tf.keras.layers.Dense( 1, activation='sigmoid'))
+
+
+
 
 #Compile/Build model:
 #Good optimisers: 'sgd', 'Adadelta', 'Adam', 'adam'
 #Losses: 'mean_squared_error', 'binary_crossentropy'
 #Metrics: 'accuracy' always
 #Batch_size: could try 32
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']) 
+model.compile(optimizer='Adadelta', loss='binary_crossentropy', metrics=['accuracy']) 
 
 #Printing function to parse into model
 class PrintSequenceCallback(keras.callbacks.Callback):
@@ -75,7 +77,7 @@ class PrintSequenceCallback(keras.callbacks.Callback):
 #Train model
 #This will print the results as it trains
 # model.fit(numbers, labels, epochs=10, validation_split=0.2, callbacks=[PrintSequenceCallback()]) 
-model.fit(numbers, labels, epochs=100, validation_split=0.2)
+model.fit(numbers, labels, epochs=10, validation_split=0.2)
 
 #Compares AI prediction and actual data (Or something)
 test_loss, test_acc = model.evaluate(numbers, labels)
