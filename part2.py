@@ -1,9 +1,7 @@
 #Initialisation 
 import numpy as np
 import keras
-import tensorflow as tf
-import pandas as pd
-from sklearn.model_selection import train_test_split
+import tensorflow as tf 
 from sklearn.metrics import accuracy_score
 
 #Try testing the error of AI/Testing primes
