@@ -44,7 +44,7 @@ def run_model(numbers, labels):
                 print(f"labels: {labels}")
     #Train model
     # model.fit(numbers, labels, epochs=10, validation_split=0.2, callbacks=[PrintSequenceCallback()])            
-    model.fit(numbers, labels, epochs=1000, validation_split=0.2)
+    model.fit(numbers, labels, epochs=10000, validation_split=0.2)
     test_loss, test_acc = model.evaluate(numbers, labels)
     return model
 
