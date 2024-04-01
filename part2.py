@@ -57,7 +57,7 @@ def main():
     #Label primes
     labels = np.array([1 if is_prime(num) else 0 for num in numbers])
 
-    count = 0
+    count = 0 #Sucessful models count
     while True:
         model = run_model(numbers, labels)
         #Make prediction
