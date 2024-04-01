@@ -9,6 +9,8 @@ import keras
 import tensorflow as tf
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
 
 #Try testing the error of AI/Testing primes
 def is_prime(num):
@@ -24,61 +26,83 @@ def is_prime(num):
             return False
     return True
 
-##################################################################################################
-#Could make a csv where one side is numbers to 10 000 
-#While the other is 0 or 1 
-#This will allow binary crossentropy
-##################################################################################################
 
 #for Primes generated locally 
-# numbers = np.arange(1, 10001)
-# labels = np.array([1 if is_prime(num) else 0 for num in numbers])
+numbers = np.arange(1, 7920)
 
 #for document reading 
-document = pd.read_csv('primenumbers.csv')
-numbers = document['Primes'].values
+# document = pd.read_csv('primenumbers.csv') #This document only contains primes
+# numbers = document['Primes'].values
+
+
+#Data pre-processing: 
 numbers = numbers.reshape(-1, 1)
+#label primes
 labels = np.array([1 if is_prime(num) else 0 for num in numbers])
 
 #Build and train model 
 model = tf.keras.models.Sequential()
 
-#data shape
+#Data Shape
 model.add(tf.keras.Input(shape=numbers.shape[1])) 
 
-#ReLu = Linear regression model 
-for i in range(0, 14):
+#ReLu = Rectified Linear model
+for i in range(0, 7):
     model.add(tf.keras.layers.Dense( 2 ** (i), activation='relu'))
 
-#Tanh - -1 to 1 
-for i in range(0,7):
-    model.add(tf.keras.layers.Dense( 2 ** (i), activation='tanh'))
+model.add(tf.keras.layers.Dense( 2 ** (7), activation='tanh'))
 
 #Binary 0 and 1
+model.add(tf.keras.layers.Dense( 4, activation='sigmoid'))
+model.add(tf.keras.layers.Dense( 2, activation='sigmoid'))
 model.add(tf.keras.layers.Dense( 1, activation='sigmoid'))
 
 #Compile/Build model:
-# model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']) 
-# model.compile(optimizer='Adam', loss='binary_crossentropy', metrics=['accuracy']) 
-
-#Mean squared error 
-model.compile(optimizer='Adam', loss='mean_squared_error', metrics=['accuracy']) 
+#Good optimisers: 'sgd', 'Adadelta', 'Adam', 'adam'
+#Losses: 'mean_squared_error', 'binary_crossentropy'
+#Metrics: 'accuracy' always
+#Batch_size: could try 32
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']) 
 
 #Printing function to parse into model
 class PrintSequenceCallback(keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs=None):
-        if epoch % 1 == 0:  # Adjust the frequency of printing as needed
+        if epoch % 1 == 0:  # Adjust the frequency of printing
             predictions = np.round(self.model.predict(numbers)).flatten()
             print(f"Epoch {epoch+1} Predictions: {numbers[predictions == 1].flatten()}")
             print(f"labels: {labels}")
 
 #Train model
-model.fit(numbers, labels, epochs=10, validation_split=0.2, callbacks=[PrintSequenceCallback()])
+#This will print the results as it trains
+# model.fit(numbers, labels, epochs=10, validation_split=0.2, callbacks=[PrintSequenceCallback()]) 
+model.fit(numbers, labels, epochs=100, validation_split=0.2)
 
 #Compares AI prediction and actual data (Or something)
 test_loss, test_acc = model.evaluate(numbers, labels)
 
+#Make prediction
+prediction = model.predict(labels)
+prediction = [0 if num < 0.5 else 1 for num in prediction]
+
+#Evaluate accuracy of prediction
+accuracy_of_prediction = accuracy_score(labels, prediction)
+
 #Just testing parameters
-print('Test Accuracy:', test_acc)
-print(f"{numbers}")
-print(f"{labels}")
+print(f"Labels: {labels}")
+print(f"Prediction: {prediction}")
+print(f"Prediction Accuracy: {accuracy_of_prediction}")
+
+
+#This code allows to save the current model:
+#model.save('New_Model_Attempt')
+
+#Deletes model in this file
+#del model
+
+#Reloading model: 
+#model = load_model('MODEL_NAME')
+
+
+
+#Write a function to run the models inifnitely untill a good one is reached 
+#Like while 1 run if model accuracy above blah save it 
